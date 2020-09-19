@@ -340,7 +340,7 @@ ASALocalRun/
 healthchecksdb
 
 # Personal
-*.db
+skiner.db
 bin
 obj
 appsettings.json
