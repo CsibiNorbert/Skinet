@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Skiner.Data\Skiner.Data.csproj" />
+    <ProjectReference Include="..\Skiner.Data\Skiner.Infrastructure.csproj" />
   </ItemGroup>
 
 
