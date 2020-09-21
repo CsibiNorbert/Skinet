@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Skiner.Data.Contexts;
+using Skiner.Infrastructure.Repositories;
+using Skinet.Core.Interfaces;
 
 namespace Skinet
 {
@@ -22,6 +24,7 @@ namespace Skinet
         public void ConfigureServices(IServiceCollection services)
         {
             AddDbContext(services);
+            AddServices(services);
             services.AddControllers();
         }
 
@@ -50,6 +53,11 @@ namespace Skinet
         {
             services.AddDbContext<StoreContext>(x =>
                 x.UseSqlite(_Configuration.GetConnectionString("SkinetConnectionStr")));
+        }
+
+        private void AddServices(IServiceCollection service)
+        {
+            service.AddScoped<IProductRepository, ProductRepository>();
         }
     }
 }
