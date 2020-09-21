@@ -58,6 +58,8 @@ namespace Skinet
         private void AddServices(IServiceCollection service)
         {
             service.AddScoped<IProductRepository, ProductRepository>();
+            // Generic repository injection
+            service.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         }
     }
 }
