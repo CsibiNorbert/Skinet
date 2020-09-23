@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,8 @@ namespace Skinet
 
             app.UseRouting();
 
+            app.UseStaticFiles();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -57,6 +60,7 @@ namespace Skinet
 
         private void AddServices(IServiceCollection service)
         {
+            service.AddAutoMapper(typeof(Startup));
             service.AddScoped<IProductRepository, ProductRepository>();
             // Generic repository injection
             service.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
