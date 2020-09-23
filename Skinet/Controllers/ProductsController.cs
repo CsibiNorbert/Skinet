@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Skiner.Data.Contexts;
@@ -7,6 +8,7 @@ using Skinet.Core.Entities;
 using Skinet.Core.Interfaces;
 using Skinet.Core.Specifications;
 using Skinet.Dtos;
+using Skinet.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,11 +44,18 @@ namespace Skinet.Controllers
         }
 
         [HttpGet("{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse) ,StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Product>> GetProduct(int productId)
         {
             var spec = new ProductsWithTypesAndBrandsSpec(productId);
             var product = await _productRepo.GetEntityWithSpec(spec);
 
+            if (product == null)
+            {
+                // 404: Not Found
+                return NotFound(new ApiResponse(404));
+            }
             return Ok(_mapper.Map<ReturnProductDto>(product));
         }
 
