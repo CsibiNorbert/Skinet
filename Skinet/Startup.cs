@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Skiner.Data.Contexts;
 using Skiner.Infrastructure.Repositories;
 using Skinet.Core.Interfaces;
@@ -66,6 +67,11 @@ namespace Skinet
 
             app.UseAuthorization();
 
+            app.UseSwagger();
+            app.UseSwaggerUI(x => {
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "Skinet API v1");
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -84,6 +90,13 @@ namespace Skinet
             service.AddScoped<IProductRepository, ProductRepository>();
             // Generic repository injection
             service.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            service.AddSwaggerGen(x => {
+                x.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Skinet API",
+                    Version = "v1"
+                });
+            });
         }
     }
 }

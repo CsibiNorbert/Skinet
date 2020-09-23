@@ -9,6 +9,7 @@ namespace Skinet.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)] // ignore for swagger
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
