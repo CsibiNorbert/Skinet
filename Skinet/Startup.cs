@@ -11,6 +11,7 @@ using Skiner.Data.Contexts;
 using Skiner.Infrastructure.Repositories;
 using Skinet.Core.Interfaces;
 using Skinet.Errors;
+using Skinet.Extensions;
 using Skinet.Middleware;
 using System.Linq;
 
@@ -30,25 +31,11 @@ namespace Skinet
         public void ConfigureServices(IServiceCollection services)
         {
             AddDbContext(services);
-            AddServices(services);
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = actionContext =>
-                {
-                    var errors = actionContext.ModelState
-                    .Where(x => x.Value.Errors.Count > 0)
-                    .SelectMany(y => y.Value.Errors)
-                    .Select(z => z.ErrorMessage)
-                    .ToArray();
+            services.AddApplicationServices();
+            services.AddSwaggerDocumentation();
 
-                    var errorResponse = new ApiValidationError{
-                        Errors = errors
-                    };
-
-                    return new BadRequestObjectResult(errorResponse);
-                };
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,11 +53,7 @@ namespace Skinet
             app.UseStaticFiles();
 
             app.UseAuthorization();
-
-            app.UseSwagger();
-            app.UseSwaggerUI(x => {
-                x.SwaggerEndpoint("/swagger/v1/swagger.json", "Skinet API v1");
-            });
+            app.AddSwaggerMiddleware();
 
             app.UseEndpoints(endpoints =>
             {
@@ -82,21 +65,6 @@ namespace Skinet
         {
             services.AddDbContext<StoreContext>(x =>
                 x.UseSqlite(_Configuration.GetConnectionString("SkinetConnectionStr")));
-        }
-
-        private void AddServices(IServiceCollection service)
-        {
-            service.AddAutoMapper(typeof(Startup));
-            service.AddScoped<IProductRepository, ProductRepository>();
-            // Generic repository injection
-            service.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            service.AddSwaggerGen(x => {
-                x.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "Skinet API",
-                    Version = "v1"
-                });
-            });
         }
     }
 }
