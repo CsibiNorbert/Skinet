@@ -10,6 +10,7 @@ namespace Skinet.Core.Specifications
         public BaseSpecification(
             Expression<Func<T, bool>> criteria)
         {
+            // Criteria is a where clause
             Criteria = criteria;
         }
 

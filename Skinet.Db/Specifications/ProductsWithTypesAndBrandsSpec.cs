@@ -8,7 +8,11 @@ namespace Skinet.Core.Specifications
 {
     public class ProductsWithTypesAndBrandsSpec : BaseSpecification<Product>
     {
-        public ProductsWithTypesAndBrandsSpec(string sort)
+        public ProductsWithTypesAndBrandsSpec(string sort, int? brandId, int? typeId) :
+            base (x =>
+                (!brandId.HasValue || x.ProductBrandId == brandId) &&
+                (!typeId.HasValue || x.ProductTypeId == typeId)
+            )
         {
             // Here we do the orderings etc
             AddInclude(x => x.ProductBrand);
