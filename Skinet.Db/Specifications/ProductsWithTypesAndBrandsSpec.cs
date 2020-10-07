@@ -8,10 +8,10 @@ namespace Skinet.Core.Specifications
 {
     public class ProductsWithTypesAndBrandsSpec : BaseSpecification<Product>
     {
-        public ProductsWithTypesAndBrandsSpec(string sort, int? brandId, int? typeId) :
+        public ProductsWithTypesAndBrandsSpec(ProductSpecParams productSpecParams) :
             base (x =>
-                (!brandId.HasValue || x.ProductBrandId == brandId) &&
-                (!typeId.HasValue || x.ProductTypeId == typeId)
+                (!productSpecParams.BrandId.HasValue || x.ProductBrandId == productSpecParams.BrandId) &&
+                (!productSpecParams.TypeId.HasValue || x.ProductTypeId == productSpecParams.TypeId)
             )
         {
             // Here we do the orderings etc
@@ -19,9 +19,14 @@ namespace Skinet.Core.Specifications
             AddInclude(x => x.ProductType);
             AddOrderBy(x => x.ProductName);
 
-            if (!string.IsNullOrEmpty(sort))
+            // The -1 is because if we have already only 1 page and we multiply by 5(page size)
+            // actually we are skipping the first 5 products on the first page
+            // Skip - Take
+            ApplyPaging(productSpecParams.PageSize * (productSpecParams.PageIndex - 1), productSpecParams.PageSize);
+
+            if (!string.IsNullOrEmpty(productSpecParams.Sort))
             {
-                switch (sort)
+                switch (productSpecParams.Sort)
                 {
                     case "priceAsc":
                         AddOrderBy(p => p.Price);

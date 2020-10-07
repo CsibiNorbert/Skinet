@@ -26,6 +26,8 @@ namespace Skiner.Infrastructure.Specification_Evaluators
 
         private static IQueryable<TEntity> EvaluateCriteria(IQueryable<TEntity> inputQuery, ISpecification<TEntity> specification)
         {
+            // Order matters
+
             if (specification.Criteria != null)
             {
                 inputQuery = inputQuery.Where(specification.Criteria);
@@ -39,6 +41,11 @@ namespace Skiner.Infrastructure.Specification_Evaluators
             if (specification.OrderByDescending != null)
             {
                 inputQuery = inputQuery.OrderByDescending(specification.OrderByDescending);
+            }
+
+            if (specification.IsPagingEnabled)
+            {
+                inputQuery = inputQuery.Skip(specification.Skip).Take(specification.Take);
             }
 
             return inputQuery;
