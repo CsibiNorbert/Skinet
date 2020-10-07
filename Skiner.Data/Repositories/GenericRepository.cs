@@ -19,6 +19,12 @@ namespace Skiner.Infrastructure.Repositories
             _StoreContext = storeContext;
         }
 
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            // Number of results
+            return await ApplySpecification(spec).CountAsync();
+        }
+
         public async Task<T> GetByIdAsync(int Id)
         {
             return await _StoreContext.Set<T>().FindAsync();
