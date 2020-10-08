@@ -35,7 +35,15 @@ namespace Skinet
             services.AddControllers();
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();
-
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("LocalCorsPolicy", policy =>
+                {
+                    // If on any unsecured port, we are not returning any header that allows the browser to display info
+                    // Trusted origins can see the header being present
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,7 +59,7 @@ namespace Skinet
             app.UseRouting();
 
             app.UseStaticFiles();
-
+            app.UseCors("LocalCorsPolicy");
             app.UseAuthorization();
             app.AddSwaggerMiddleware();
 

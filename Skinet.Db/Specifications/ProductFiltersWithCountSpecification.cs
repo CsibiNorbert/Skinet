@@ -11,6 +11,7 @@ namespace Skinet.Core.Specifications
     public class ProductFiltersWithCountSpecification : BaseSpecification<Product>
     {
         public ProductFiltersWithCountSpecification(ProductSpecParams productSpecParams) : base (x =>
+                (string.IsNullOrEmpty(productSpecParams.Search) || x.ProductName.ToLower().Contains(productSpecParams.Search)) &&
                 (!productSpecParams.BrandId.HasValue || x.ProductBrandId == productSpecParams.BrandId) &&
                 (!productSpecParams.TypeId.HasValue || x.ProductTypeId == productSpecParams.TypeId)
             )
