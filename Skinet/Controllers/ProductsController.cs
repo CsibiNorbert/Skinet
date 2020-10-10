@@ -50,8 +50,8 @@ namespace Skinet.Controllers
         }
 
         [HttpGet("{productId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse) ,StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ReturnProductDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Product>> GetProduct(int productId)
         {
             var spec = new ProductsWithTypesAndBrandsSpec(productId);
