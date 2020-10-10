@@ -17,7 +17,14 @@ export class ShopComponent implements OnInit {
   // filtering
   brandIdSelected = 0;
   typeIdSelected = 0;
-  
+  // Api doesn`t have pre-defined sortings like the brand & type
+  sortSelected = 'name';
+  sortOptions = [
+    {name: 'Alphabetical', value: 'name'},
+    {name: 'Price: Low to High', value: 'priceAsc'},
+    {name: 'Price: High to Low', value: 'priceDesc'}
+  ];
+
   constructor(private shopService: ShopService) { }
 
   ngOnInit(): void {
@@ -27,7 +34,7 @@ export class ShopComponent implements OnInit {
   }
 
   getProducts(): void{
-    this.shopService.getProducts(this.brandIdSelected, this.typeIdSelected).subscribe(response => {
+    this.shopService.getProducts(this.brandIdSelected, this.typeIdSelected, this.sortSelected).subscribe(response => {
       this.products = response.data;
     }, error => {
       console.log(error);
@@ -57,6 +64,11 @@ export class ShopComponent implements OnInit {
 
   onTypeSelected(typeId: number) {
     this.typeIdSelected = typeId;
+    this.getProducts();
+  }
+
+  onSortSelected(sortValue: string) {
+    this.sortSelected = sortValue;
     this.getProducts();
   }
 }
