@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IBrand } from '../shared/models/brands.model';
 import { IType } from '../shared/models/product-type.model';
 import { IProduct } from '../shared/models/product.model';
@@ -11,6 +11,11 @@ import { ShopService } from './services/shop.service';
   styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
+
+  // When structural directives like *ngIf are in place, then static false.
+  // Which means we put conditions and it`s not static
+  @ViewChild('search', {static: true}) searchTerm: ElementRef;
+
   products: IProduct[];
   brands: IBrand[];
   productTypes: IType[];
@@ -77,6 +82,19 @@ export class ShopComponent implements OnInit {
 
   onPageChangedHandler(pageNum: number) {
     this.shopParams.pageNumber = pageNum;
+    this.getProducts();
+  }
+
+  onSearch(){
+    this.shopParams.search = this.searchTerm.nativeElement.value;
+    this.getProducts();
+  }
+
+  onReset(){
+    this.searchTerm.nativeElement.value = '';
+
+    // reset all filters
+    this.shopParams = new ShopParams();
     this.getProducts();
   }
 }

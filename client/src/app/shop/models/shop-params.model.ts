@@ -6,7 +6,8 @@ export class ShopParams {
   typeId = 0;
   // Api doesn`t have pre-defined sortings like the brand & type
   sort = 'name';
-
+  search?: string;
+  
   pageNumber = 1;
   pageSize = 6;
 
