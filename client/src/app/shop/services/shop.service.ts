@@ -6,6 +6,7 @@ import { IPagination } from 'src/app/shared/models/pagination.model';
 import { IType } from 'src/app/shared/models/product-type.model';
 import { map } from 'rxjs/operators';
 import { ShopParams } from '../models/shop-params.model';
+import { IProduct } from 'src/app/shared/models/product.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,7 @@ export class ShopService {
     params = params.append('pageIndex', shopParams.pageNumber.toString());
     params = params.append('pageIndex', shopParams.pageSize.toString());
 
+    // Since we are sending up HttpParams we need to add the observe here so that we can observe the response - this is required.
     return this.http.get<IPagination>(this.baseUrl + 'products', {observe: 'response', params})
     .pipe(
       // We map the HttpResponse to an IPagination
@@ -40,6 +42,10 @@ export class ShopService {
         return response.body;
       })
     );
+  }
+
+  public getProduct(id: number): Observable<IProduct>{
+    return this.http.get<IProduct>(this.baseUrl + 'products/' + id);
   }
 
   public getBrands(): Observable<IBrand[]>{
