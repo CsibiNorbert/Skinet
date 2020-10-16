@@ -6,11 +6,11 @@ import { HomeComponent } from './home/home.component';
 
 // Lazy loading => Check shop route & shop-routing module
 const routes: Routes = [
-  {path: '', component: HomeComponent},
-  {path: 'test-error', component: TestErrorComponent},
-  {path: 'error', component: ErrorComponent},
-  {path: 'shop', loadChildren: () => import('./shop/shop.module').then(mod => mod.ShopModule)},
-  {path: '**', redirectTo: '', pathMatch: 'full'}, // get them back to the home page
+  {path: '', component: HomeComponent, data: {breadcrumb: 'Home'}},
+  {path: 'test-error', component: TestErrorComponent, data: {breadcrumb: 'Test Errors'}},
+  {path: 'error', component: ErrorComponent, data: {breadcrumb: 'Server Error'}},
+  {path: 'shop', data: {breadcrumb: 'Shop'}, loadChildren: () => import('./shop/shop.module').then(mod => mod.ShopModule)},
+  {path: '**', redirectTo: '', pathMatch: 'full'}, // get them back to the home page, maybe a not-found comp?
 ];
 
 @NgModule({

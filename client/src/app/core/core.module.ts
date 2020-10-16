@@ -6,12 +6,15 @@ import { RouterModule } from '@angular/router';
 import { TestErrorComponent } from './test-error/test-error.component';
 import { ErrorComponent } from './error/error.component';
 import { ToastrModule } from 'ngx-toastr';
+import { SectionHeaderComponent } from './section-header/section-header.component';
+import { BreadcrumbModule } from 'xng-breadcrumb';
 
 // Having singletons
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
+    BreadcrumbModule,
     // positionClass: Where the tost to appear
     // dup: Prevents duplicate toasts
     // This comes with it`s own styles & need imported in the angular.json
@@ -24,10 +27,12 @@ import { ToastrModule } from 'ngx-toastr';
     CoreComponent,
     NavBarComponent,
     TestErrorComponent,
-    ErrorComponent
+    ErrorComponent,
+    SectionHeaderComponent
   ],
   exports: [
-    NavBarComponent
+    NavBarComponent,
+    SectionHeaderComponent
   ]
 })
 export class CoreModule { }
