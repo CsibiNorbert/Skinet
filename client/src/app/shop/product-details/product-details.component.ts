@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IProduct } from 'src/app/shared/models/product.model';
+import { BreadcrumbService } from 'xng-breadcrumb';
 import { ShopService } from '../services/shop.service';
 
 @Component({
@@ -16,7 +17,8 @@ export class ProductDetailsComponent implements OnInit {
   */
   constructor(
     private shopService: ShopService,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    private breadcrumbService: BreadcrumbService) { }
 
   ngOnInit(): void {
     this.loadProduct();
@@ -26,6 +28,8 @@ export class ProductDetailsComponent implements OnInit {
     // Adding the + sign at the beggining of the string, it casts the string to number
     this.shopService.getProduct(+this.activatedRoute.snapshot.paramMap.get('id')).subscribe(product => {
       this.product = product;
+      // Accesing the breadcrumb alias with @ symbol
+      this.breadcrumbService.set('@productDetails', product.productName);
     }, error => {
       console.log(error);
     });
