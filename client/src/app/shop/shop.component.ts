@@ -14,7 +14,7 @@ export class ShopComponent implements OnInit {
 
   // When structural directives like *ngIf are in place, then static false.
   // Which means we put conditions and it`s not static
-  @ViewChild('search', {static: true}) searchTerm: ElementRef;
+  @ViewChild('search', {static: false}) searchTerm: ElementRef;
 
   products: IProduct[];
   brands: IBrand[];

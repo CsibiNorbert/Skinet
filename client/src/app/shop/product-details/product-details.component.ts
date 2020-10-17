@@ -18,7 +18,10 @@ export class ProductDetailsComponent implements OnInit {
   constructor(
     private shopService: ShopService,
     private activatedRoute: ActivatedRoute,
-    private breadcrumbService: BreadcrumbService) { }
+    private breadcrumbService: BreadcrumbService) {
+      // Before loading the page, set the alias to empty so that it doesn`t show the product ID in the section header
+      this.breadcrumbService.set('@productDetails', ' ');
+     }
 
   ngOnInit(): void {
     this.loadProduct();
