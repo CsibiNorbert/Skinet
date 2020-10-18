@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Basket, IBasket, IBasketItem } from '../shared/models/basket.model';
+import { Basket, IBasket, IBasketItem, IBasketTotals } from '../shared/models/basket.model';
 import { IProduct } from '../shared/models/product.model';
 
 @Injectable({
@@ -15,15 +15,17 @@ export class BasketService {
   private basketSource = new BehaviorSubject<IBasket>(null);
   basket$ = this.basketSource.asObservable();
 
-  constructor(private http: HttpClient) { }
+  private basketTotalSource = new BehaviorSubject<IBasketTotals>(null);
+  basketTotal$ = this.basketTotalSource.asObservable();
 
+  constructor(private http: HttpClient) { }
 
   getBasket(id: string){
     return this.http.get(this.baseUrl + 'basket?id=' + id)
             .pipe(
               map((basket: IBasket) => {
                 this.basketSource.next(basket);
-                console.log(this.getCurrentBasketValue(), 'cur');
+                this.calculateTotals();
               })
             );
   }
@@ -31,11 +33,12 @@ export class BasketService {
   setBasket(basket: IBasket) {
     return this.http.post(this.baseUrl + 'basket', basket).subscribe((response: IBasket) => {
       this.basketSource.next(response);
-      console.log(response);
+      this.calculateTotals();
     }, error => {
       console.log(error);
     });
   }
+
 
   // Helper method to get current basket obj value instead of subscribing to obs
   getCurrentBasketValue() {
@@ -71,6 +74,22 @@ export class BasketService {
     return basket;
   }
 
+  private calculateTotals() {
+    const basket = this.getCurrentBasketValue();
+    const shipping = 0;
+    // reduce helps when there are more items in an array with multiple quantities
+    // b represents the item & we are adding it to a
+    // a represents the result we are returning
+    // 0 is an initial value for a, we start from 0
+    const subtotal = basket.items.reduce((a, b) => (b.price * b.quantity) + a, 0);
+    const total = shipping + subtotal;
+
+    this.basketTotalSource.next({
+      shipping,
+      total,
+      subtotal
+    });
+  }
   private mapProductItemToBasketItem(item: IProduct, quantity: number): IBasketItem {
     return {
       id: item.id,
