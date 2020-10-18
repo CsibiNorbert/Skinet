@@ -21,7 +21,7 @@ namespace Skinet.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<CustomerBasket>> GetBasketById(string id)
+        public async Task<ActionResult<CustomerBasket>> GetBasketById([FromQuery] string id)
         {
             var basket = await _basketRepository.GetBasketAsync(id);
 

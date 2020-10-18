@@ -10,6 +10,7 @@ const routes: Routes = [
   {path: 'test-error', component: TestErrorComponent, data: {breadcrumb: 'Test Errors'}},
   {path: 'error', component: ErrorComponent, data: {breadcrumb: 'Server Error'}},
   {path: 'shop', data: {breadcrumb: 'Shop'}, loadChildren: () => import('./shop/shop.module').then(mod => mod.ShopModule)},
+  {path: 'basket', data: {breadcrumb: 'Basket'}, loadChildren: () => import('./basket/basket.module').then(mod => mod.BasketModule)},
   {path: '**', redirectTo: '', pathMatch: 'full'}, // get them back to the home page, maybe a not-found comp?
 ];
 
