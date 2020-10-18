@@ -13,6 +13,7 @@ using Skinet.Core.Interfaces;
 using Skinet.Errors;
 using Skinet.Extensions;
 using Skinet.Middleware;
+using StackExchange.Redis;
 using System.Linq;
 
 namespace Skinet
@@ -73,6 +74,14 @@ namespace Skinet
         {
             services.AddDbContext<StoreContext>(x =>
                 x.UseSqlite(_Configuration.GetConnectionString("SkinetConnectionStr")));
+
+            // Redis
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                var configuration = ConfigurationOptions
+                .Parse(_Configuration.GetConnectionString("Redis"), true);
+                return ConnectionMultiplexer.Connect(configuration);
+            });
         }
     }
 }
