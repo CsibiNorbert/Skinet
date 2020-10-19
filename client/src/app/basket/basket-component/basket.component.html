@@ -60,9 +60,9 @@
                                         </td>
                                         <td class="align-middle">
                                             <div class="d-flex align-items-center">
-                                                <i class="fa fa-minus-circle text-warning mr-2" style="cursor: pointer; font-size: 2em;"></i>
+                                                <i class="fa fa-minus-circle text-warning mr-2" style="cursor: pointer; font-size: 2em;" (click)="IncrementOrDecrement(item, false)"></i>
                                                 <span class="font-weight-bold" style="font-size: 1.5em;"><strong>{{item.quantity}}</strong></span>
-                                                <i class="fa fa-plus-circle text-warning mx-2" style="cursor: pointer; font-size: 2em;"></i>
+                                                <i class="fa fa-plus-circle text-warning mx-2" style="cursor: pointer; font-size: 2em;" (click)="IncrementOrDecrement(item, true)"></i>
                                             </div>
                                         </td>
                                         <td class="align-middle">
@@ -70,7 +70,7 @@
                                         </td>
                                         <td class="align-middle text-center">
                                             <a class="text-danger">
-                                                <i class="fa fa-trash" style="font-size: 2em;">
+                                                <i class="fa fa-trash" style="font-size: 2em; cursor: pointer;" (click)="removeBasketItem(item)">
 
                                                 </i>
                                             </a>

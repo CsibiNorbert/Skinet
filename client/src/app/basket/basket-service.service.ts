@@ -67,6 +67,52 @@ export class BasketService {
     return items;
   }
 
+  incrementOrDecrementItemQuantity(item: IBasketItem, increment: boolean) {
+    const basket = this.getCurrentBasketValue();
+    const foundItemIndex = basket.items.findIndex(i => i.id === item.id);
+
+    if (foundItemIndex > -1 && increment) {
+      basket.items[foundItemIndex].quantity++;
+      this.setBasket(basket);
+    }
+
+    if (foundItemIndex > -1 && !increment) {
+      if (basket.items[foundItemIndex].quantity > 1) {
+        basket.items[foundItemIndex].quantity--;
+        this.setBasket(basket);
+      } else {
+        this.removeItemFromBasket(item);
+      }
+    }
+
+  }
+
+  removeItemFromBasket(item: IBasketItem) {
+    const basket = this.getCurrentBasketValue();
+    // some return a boolean if there is any item in the basket
+    if (basket.items.some(x => x.id === item.id)) {
+      // to remove item from array
+      // We return all items that don`t match to the item id
+      basket.items = basket.items.filter(i => i.id !== item.id);
+
+      if (basket.items.length > 0) {
+        this.setBasket(basket);
+      } else {
+        this.deleteBasket(basket);
+      }
+    }
+  }
+
+  private deleteBasket(basket: IBasket) {
+    return this.http.delete(this.baseUrl + 'basket?id=' + basket.id).subscribe(() => {
+      this.basketSource.next(null);
+      this.basketTotalSource.next(null);
+      localStorage.removeItem('basket_id');
+    }, error => {
+      console.log(error);
+    });
+  }
+
   private createBasket(): IBasket {
     const basket = new Basket();
     // Some level of persistance
