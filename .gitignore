@@ -344,3 +344,6 @@ skiner.db
 bin
 obj
 appsettings.json
+
+# Redis snapshot
+dump.rdb
