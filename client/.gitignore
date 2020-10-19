@@ -44,7 +44,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-.rdb
+
+# Redis snapshot
+dump.rdb
 
 # Ignore SSl cert
 ssl
